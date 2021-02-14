@@ -40,8 +40,8 @@ public class MongoSync4ChangeEntryRepository<CHANGE_ENTRY extends ChangeEntry> e
     }
   }
 
-  public MongoSync4ChangeEntryRepository(MongoCollection<Document> collection, boolean indexCreation) {
-    super(collection, new String[]{KEY_EXECUTION_ID, KEY_AUTHOR, KEY_CHANGE_ID}, indexCreation);
+  public MongoSync4ChangeEntryRepository(MongoCollection<Document> collection, boolean indexCreation, ReadWriteConfiguration readWriteConfiguration) {
+    super(collection, new String[]{KEY_EXECUTION_ID, KEY_AUTHOR, KEY_CHANGE_ID}, indexCreation, readWriteConfiguration);
   }
 
   @Override
