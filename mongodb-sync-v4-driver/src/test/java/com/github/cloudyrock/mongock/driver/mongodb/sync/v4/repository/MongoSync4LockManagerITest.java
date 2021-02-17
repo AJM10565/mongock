@@ -7,7 +7,12 @@ import com.github.cloudyrock.mongock.driver.mongodb.test.template.util.MongoDBDr
 public class MongoSync4LockManagerITest extends MongoLockManagerITestBase {
 
   protected void initializeRepository() {
-    repository = new MongoSync4LockRepository(getDataBase().getCollection(LOCK_COLLECTION_NAME), true);
+    repository = new MongoSync4LockRepository(getDataBase().getCollection(LOCK_COLLECTION_NAME), true, ReadWriteConfiguration.getDefault());
+    repository.initialize();
+  }
+
+  protected void initializeRepository(ReadWriteConfiguration readWriteConfiguration) {
+    repository = new MongoSync4LockRepository(getDataBase().getCollection(LOCK_COLLECTION_NAME), true, readWriteConfiguration);
     repository.initialize();
   }
 

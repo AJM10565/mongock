@@ -34,7 +34,7 @@ public class MongoSync4LockRepositoryITest extends MongoLockRepositoryITestBase 
   public void shouldNoCreateUniqueIndex_whenEnsureIndex_IfAlreadyCreated() throws MongockException {
     initializeRepository();
     // given
-    repository = Mockito.spy(new MongoSync4LockRepository(getDataBase().getCollection(LOCK_COLLECTION_NAME), true));
+    repository = Mockito.spy(new MongoSync4LockRepository(getDataBase().getCollection(LOCK_COLLECTION_NAME), true, ReadWriteConfiguration.getDefault()));
 
     doReturn(true).when((MongoSync4LockRepository)repository).isUniqueIndex(any(Document.class));
 
@@ -49,7 +49,7 @@ public class MongoSync4LockRepositoryITest extends MongoLockRepositoryITestBase 
 
   @Override
   protected void initializeRepository() {
-    repository = Mockito.spy(new MongoSync4LockRepository(getDataBase().getCollection(LOCK_COLLECTION_NAME), true));
+    repository = Mockito.spy(new MongoSync4LockRepository(getDataBase().getCollection(LOCK_COLLECTION_NAME), true, ReadWriteConfiguration.getDefault()));
     repository.initialize();
   }
 

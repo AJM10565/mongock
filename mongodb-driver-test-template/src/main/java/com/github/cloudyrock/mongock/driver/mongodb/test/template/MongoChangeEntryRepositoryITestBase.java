@@ -29,7 +29,6 @@ public abstract class MongoChangeEntryRepositoryITestBase extends IntegrationTes
     initializeRepository(false);
   }
 
-
   @Test
   public void shouldBeOk_WhenNoIndexCreation_IfIndexAlreadyCreated() throws MongockException {
     getDefaultAdapter().createIndex(getIndexDocument(new String[]{"executionId", "author", "changeId"}), new IndexOptions().unique(true));
@@ -38,68 +37,39 @@ public abstract class MongoChangeEntryRepositoryITestBase extends IntegrationTes
 
   @Test
   public void shouldReturnFalse_whenHasNotBeenExecuted_IfThereIsWithSameIdAndAuthorAndStateNull() {
-    initializeRepository(true);
-    String changeId = "changeId";
-    String author = "author";
-    String executionId = "executionId";
-    createAndInsertChangeEntry(true, null, changeId, author, executionId);
-    Assert.assertEquals("pre-requisite: changeEntry should be added", 1,
-        getDefaultAdapter().countDocuments(new Document().append("changeId", changeId).append("author", author)));
-
-    Assert.assertTrue(repository.isAlreadyExecuted(changeId, author));
+    performTest(true, null, true);
   }
 
   @Test
   public void shouldReturnFalse_whenHasNotBeenExecuted_IfThereIsWithSameIdAndAuthorAndNoState() {
-    initializeRepository(true);
-    String changeId = "changeId";
-    String author = "author";
-    String executionId = "executionId";
-    createAndInsertChangeEntry(false, null, changeId, author, executionId);
-    Assert.assertEquals("pre-requisite: changeEntry should be added", 1,
-        getDefaultAdapter().countDocuments(new Document().append("changeId", changeId).append("author", author)));
-
-    Assert.assertTrue(repository.isAlreadyExecuted(changeId, author));
+    performTest(false, null, true);
   }
-
 
   @Test
   public void shouldReturnFalse_whenHasNotBeenExecuted_IfThereIsWithSameIdAndAuthorAndStateEXECUTED() {
-    initializeRepository(true);
-    String changeId = "changeId";
-    String author = "author";
-    String executionId = "executionId";
-    createAndInsertChangeEntry(true, ChangeState.EXECUTED.toString(), changeId, author, executionId);
-    Assert.assertEquals("pre-requisite: changeEntry should be added", 1,
-        getDefaultAdapter().countDocuments(new Document().append("changeId", changeId).append("author", author)));
-
-    Assert.assertTrue(repository.isAlreadyExecuted(changeId, author));
+    performTest(true, ChangeState.EXECUTED.toString(), true);
   }
 
   @Test
   public void shouldReturnTrue_whenHasNotBeenExecuted_IfThereIsWithSameIdAndAuthorAndStateIGNORED() {
-    initializeRepository(true);
-    String changeId = "changeId";
-    String author = "author";
-    String executionId = "executionId";
-    createAndInsertChangeEntry(true, ChangeState.IGNORED.toString(), changeId, author, executionId);
-    Assert.assertEquals("pre-requisite: changeEntry should be added", 1,
-        getDefaultAdapter().countDocuments(new Document().append("changeId", changeId).append("author", author)));
-
-    Assert.assertFalse(repository.isAlreadyExecuted(changeId, author));
+    performTest(true, ChangeState.IGNORED.toString(), false);
   }
 
   @Test
   public void shouldReturnTrue_whenHasNotBeenExecuted_IfThereIsWithSameIdAndAuthorAndStateFAILED() {
+    performTest(true, ChangeState.FAILED.toString(), false);
+  }
+
+  private void performTest(boolean withState, String state, boolean assertResult) {
     initializeRepository(true);
     String changeId = "changeId";
     String author = "author";
     String executionId = "executionId";
-    createAndInsertChangeEntry(true, ChangeState.FAILED.toString(), changeId, author, executionId);
+    createAndInsertChangeEntry(withState, state, changeId, author, executionId);
     Assert.assertEquals("pre-requisite: changeEntry should be added", 1,
         getDefaultAdapter().countDocuments(new Document().append("changeId", changeId).append("author", author)));
 
-    Assert.assertFalse(repository.isAlreadyExecuted(changeId, author));
+    Assert.assertEquals(assertResult, repository.isAlreadyExecuted(changeId, author));
   }
 
 
