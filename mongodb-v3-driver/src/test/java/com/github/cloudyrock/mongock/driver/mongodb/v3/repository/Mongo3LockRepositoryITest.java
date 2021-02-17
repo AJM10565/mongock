@@ -15,7 +15,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 
-public class Mongo3LockRepositoryITest extends MongoLockRepositoryITestBase {
+public class
+325Mongo3LockRepositoryITest extends MongoLockRepositoryITestBase {
 
   private static final String LOCK_COLLECTION_NAME = "mongockLock";
 

@@ -98,6 +98,22 @@ public abstract class MongoSync4DriverBase<CHANGE_ENTRY extends ChangeEntry>
     this.indexCreation = indexCreation;
   }
 
+  public void setTransactionOptions(TransactionOptions txOptions) {
+    this.txOptions = txOptions;
+  }
+
+  public void setWriteConcern(WriteConcern writeConcern) {
+    this.writeConcern = writeConcern;
+  }
+
+  public void setReadConcern(ReadConcern readConcern) {
+    this.readConcern = readConcern;
+  }
+
+  public void setReadPreference(ReadPreference readPreference) {
+    this.readPreference = readPreference;
+  }
+
   @Override
   public void runValidation() throws MongockException {
     if (mongoDatabase == null) {
@@ -115,14 +131,6 @@ public abstract class MongoSync4DriverBase<CHANGE_ENTRY extends ChangeEntry>
       this.lockRepository = new MongoSync4LockRepository(collection, indexCreation, getReadWriteConfiguration());
     }
     return lockRepository;
-  }
-
-  protected ReadWriteConfiguration getReadWriteConfiguration() {
-    return new ReadWriteConfiguration(
-        writeConcern != null ? writeConcern : DEFAULT_WRITE_CONCERN,
-        readConcern != null ? readConcern : DEFAULT_READ_CONCERN,
-        readPreference != null ? readPreference : DEFAULT_READ_PREFERENCE
-    );
   }
 
   @Override
@@ -168,25 +176,14 @@ public abstract class MongoSync4DriverBase<CHANGE_ENTRY extends ChangeEntry>
     }
   }
 
-  /**
-   * When using Java MongoDB driver directly, it sets the transaction options for all the Mongock's transactions.
-   * Default: readPreference: primary, readConcern and writeConcern: majority
-   * @param txOptions transaction options
-   */
-  public void setTransactionOptions(TransactionOptions txOptions) {
-    this.txOptions = txOptions;
-  }
 
-  public void setWriteConcern(WriteConcern writeConcern) {
-    this.writeConcern = writeConcern;
-  }
 
-  public void setReadConcern(ReadConcern readConcern) {
-    this.readConcern = readConcern;
-  }
-
-  public void setReadPreference(ReadPreference readPreference) {
-    this.readPreference = readPreference;
+  protected ReadWriteConfiguration getReadWriteConfiguration() {
+    return new ReadWriteConfiguration(
+        writeConcern != null ? writeConcern : DEFAULT_WRITE_CONCERN,
+        readConcern != null ? readConcern : DEFAULT_READ_CONCERN,
+        readPreference != null ? readPreference : DEFAULT_READ_PREFERENCE
+    );
   }
 
   private TransactionOptions buildDefaultTxOptions() {
