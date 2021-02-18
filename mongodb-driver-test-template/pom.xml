@@ -48,6 +48,7 @@
       <groupId>org.mongodb</groupId>
       <artifactId>mongo-java-driver</artifactId>
       <version>${mongodb.java-driver}</version>
+      <scope>optional</scope>
     </dependency>
 
     <!-- TEST DEPENDENCIES -->

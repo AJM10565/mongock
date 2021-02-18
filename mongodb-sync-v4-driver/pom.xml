@@ -45,6 +45,12 @@
       <artifactId>mongodb-driver-test-template</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.mongodb</groupId>
+          <artifactId>mongo-java-driver</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
